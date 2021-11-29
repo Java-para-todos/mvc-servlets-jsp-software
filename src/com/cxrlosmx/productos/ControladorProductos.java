@@ -45,22 +45,78 @@ public class ControladorProductos extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//Obtener la lista de productos de la clase Modelo
-		List<Productos> listaProductos=null;
-		try {
-			 listaProductos=modeloProductos.getProductos();
+		//Simplificamos metodos
 		
-		//Agregar la lista de productos al request
-		request.setAttribute("LISTAPRODUCTOS", listaProductos);
+		//1.-Leer el parametro del formulario
+		String comando=request.getParameter("instruccion");
 		
-		//Enviar el request a la pagina JSP
-		RequestDispatcher miDispatcher=request.getRequestDispatcher("/ListaProductos.jsp");
-		
-		miDispatcher.forward(request, response);
-		} catch (Exception e) {
-			e.printStackTrace();
+		//2.-Si no se envia el parametro listar productos
+		if(comando==null) {
+			comando="listar";
 		}
+		
+		//3.-Redirigir el flujo de ejecuciòn al mètodo adecuado
+		switch(comando) {
+		case "listar":{
+			obtenerProductos(request, response);
+			break;
+		}
+		
+		case "intruccion":{
+			agregarProducto(request, response);
+			break;
+		}
+		
+		default:{
+			obtenerProductos(request, response);
+		}
+		
+		}
+		
+		
+		
+		
 	}
+
+
+
+	private void agregarProducto(HttpServletRequest request, HttpServletResponse response) {
+		//Pasos
+		
+		//1.-Leer la informacion del producto que viene del formulario
+		String nombre=request.getParameter("nombre");
+		int precio=Integer.parseInt(request.getParameter("nombre"));
+		//2.-Crear un objeto de tipo producto
+		Productos producto=new Productos(nombre,precio);
+		//3.-Enviar el objeto al modelo e insertar el objeto producto en la BBDD
+		modeloProductos.agregarElProducto(producto);
+		//4.-Volver a listar la tabla de producto
+		obtenerProductos(request, response);
+		
+	}
+
+
+
+	private void obtenerProductos(HttpServletRequest request, HttpServletResponse response) {
+		//Obtener la lista de productos de la clase Modelo
+				List<Productos> listaProductos=null;
+				try {
+					 listaProductos=modeloProductos.getProductos();
+				
+				//Agregar la lista de productos al request
+				request.setAttribute("LISTAPRODUCTOS", listaProductos);
+				
+				//Enviar el request a la pagina JSP
+				RequestDispatcher miDispatcher=request.getRequestDispatcher("/ListaProductos.jsp");
+				
+				miDispatcher.forward(request, response);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+		
+	}
+	
+	
 
 	
 }

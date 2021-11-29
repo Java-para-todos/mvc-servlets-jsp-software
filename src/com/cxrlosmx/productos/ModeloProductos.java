@@ -42,4 +42,13 @@ public class ModeloProductos {
 		
 		
 	}
+	public void agregarElProducto(Productos producto) {
+		//1.-Obtener la conexion
+		
+		//2.-Crear la instruccion SQL para insertar datos
+		
+		//3.-Establecer los parametros para el producto
+		
+		//4.-Ejecutar la instruccion SQL
+	}
 }
