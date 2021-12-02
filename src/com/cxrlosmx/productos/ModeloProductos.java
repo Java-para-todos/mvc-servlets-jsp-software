@@ -68,4 +68,42 @@ public class ModeloProductos {
 			
 		}
 	}
+
+	public Productos getProducto(String nombre) {
+		Productos producto=null;
+		
+		
+		try {
+		
+		//1.-Establecer la conexion
+		Connection conexion=origenDatos.getConnection();	
+		//2.-Crear el SQL que busque el producto
+		String sql="SELECT * FROM productos WHERE nombre=?";
+		
+		//3.-Crear la consulta
+		PreparedStatement statement=conexion.prepareStatement(sql);
+		//4.-Establecer los parametros
+		statement.setString(1, nombre);
+		//5.-Ejecutar la consulta
+		ResultSet rc=statement.executeQuery();
+		
+		//6.-Obtener los datos de respuesta
+		if(rc.next()) {
+		
+			producto=new Productos(nombre, rc.getInt("precio"));
+		
+		}
+		else {
+			throw new Exception("No se ha encontrado el producto con el nombre "+nombre);
+		}
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+				return producto;
+	}
+
+	public void actualizarProducto(Productos productoActualizado) {
+		// TODO Auto-generated method stub
+		
+	}
 }

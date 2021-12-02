@@ -62,8 +62,26 @@ public class ControladorProductos extends HttpServlet {
 			break;
 		}
 		
-		case "intruccion":{
+		case "insertarBBDD":{
 			agregarProducto(request, response);
+			break;
+		}
+		case "cargar":{
+			try {
+				cargaProductos(request, response);
+			} catch (Exception e) {
+				
+				e.printStackTrace();
+			}
+			break;
+		}
+		case "actualizarBBDD":{
+			try {
+				actualizaProductos(request, response);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			break;
 		}
 		
@@ -76,6 +94,39 @@ public class ControladorProductos extends HttpServlet {
 		
 		
 		
+	}
+
+	
+
+	private void actualizaProductos(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		//1.-Leer los datos que le vienen del formulario para actualizar
+		String nombre=request.getParameter("nombre");
+		int precio=Integer.parseInt(request.getParameter("nombre"));
+		
+		//2.-Crear un objeto de tipo Producto con la informacion del formulario
+		Productos productoActualizado=new Productos(nombre,precio);
+		
+		//3.-Actualizar la BBDD con la inf
+		modeloProductos.actualizarProducto(productoActualizado);
+		//4.-Volver al listado con la información actualizada
+		obtenerProductos(request, response);
+		
+	}
+
+
+
+	private void cargaProductos(HttpServletRequest request, HttpServletResponse response)throws Exception
+	{
+		//1.-Leer el nombre del producto
+		String nombre=request.getParameter("nombre");
+		//2.-Enviar el articulo al modelo
+		Productos producto=modeloProductos.getProducto(nombre);
+		//3.-Colocar atributo correspondiente al código articulo
+		request.setAttribute("ProductoActualizar",producto);
+		
+		//4.-Enviar toda la informacion al formulario de actualizar
+		RequestDispatcher dispatcher=request.getRequestDispatcher("/actualizarProducto.jsp");
+		dispatcher.forward(request, response);
 	}
 
 

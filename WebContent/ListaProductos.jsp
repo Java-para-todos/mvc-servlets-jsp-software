@@ -18,15 +18,25 @@
 	<tr>
 	<td>Nombre</td>
 	<td>Precio</td>
+	<td>Acción</td>
 	</tr>
 	
 	<c:forEach var="i" items="${LISTAPRODUCTOS}">
+	<!-- Link para cada producto con su campo clave -->
+		<c:url var="linkTemp" value="ControladorProductos">
+		<c:param name="instruccion" value="cargar"></c:param>
+		<c:param name="nombre" value="${i.nombre}"></c:param>
+		</c:url>
+	
 		<tr>
 		<td>
 		${i.nombre}
 		</td>
 		<td>
 		${i.precio}
+		</td>
+		<td>
+		<a href="${linkTemp}">Actualizar</a>
 		</td>
 		</tr>
 		
